@@ -18,7 +18,17 @@ jobs:
     name: "New tag and release branch"
     runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
